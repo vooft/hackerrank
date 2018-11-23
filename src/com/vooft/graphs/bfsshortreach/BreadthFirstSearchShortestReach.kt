@@ -1,4 +1,4 @@
-package com.vooft.graphs
+package com.vooft.graphs.bfsshortreach
 
 import java.util.*
 
