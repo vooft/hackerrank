@@ -1,5 +1,6 @@
 package com.vooft.graphs.dijkstrashortreach
 
+import java.io.*
 import java.util.*
 
 fun putEdge(neighbors: MutableMap<Int, Edge>, node: Node, weight: Int) {
@@ -12,7 +13,7 @@ fun putEdge(neighbors: MutableMap<Int, Edge>, node: Node, weight: Int) {
     }
 }
 
-fun shortestReach(n: Int, edges: Array<List<Int>>, s: Int): Array<Int> {
+fun shortestReach(n: Int, edges: Array<IntArray>, s: Int): Array<Int> {
     val nodes = (0..n).map { Node(it, mutableMapOf()) }
     for (edgeArray in edges) {
         val node1 = nodes[edgeArray[0]]
@@ -54,29 +55,41 @@ fun shortestReach(n: Int, edges: Array<List<Int>>, s: Int): Array<Int> {
 
 // https://www.hackerrank.com/challenges/dijkstrashortreach/problem
 fun main(args: Array<String>) {
-    val scan = Scanner(System.`in`)
+    val scanner = InputReader(System.`in`)
 
-    val t = scan.nextLine().trim().toInt()
+    val outputStream = System.getenv("OUTPUT_PATH")?.let { FileOutputStream(it) }  ?: System.out
+    val bufferedWriter = OutputWriter(outputStream)
 
-    for (tItr in 1..t) {
-        val nm = scan.nextLine().split(" ")
+    val t = scanner.nextInt()
 
-        val n = nm[0].trim().toInt()
+    for (tItr in 0 until t) {
+        val n = scanner.nextInt()
+        val m = scanner.nextInt()
 
-        val m = nm[1].trim().toInt()
-
-        val edges = Array(m) { List(3) { 0 } }
+        val edges = Array(m) { IntArray(3) }
 
         for (i in 0 until m) {
-            edges[i] = scan.nextLine().split(" ").map{ it.trim().toInt() }
+            for (j in 0..2) {
+                edges[i][j] = scanner.nextInt()
+            }
         }
 
-        val s = scan.nextLine().trim().toInt()
+        val s = scanner.nextInt()
 
         val result = shortestReach(n, edges, s)
 
-        println(result.joinToString(" "))
+        for (i in result.indices) {
+            bufferedWriter.print(result[i].toString())
+
+            if (i != result.size - 1) {
+                bufferedWriter.print(" ")
+            }
+        }
+
+        bufferedWriter.printLine()
     }
+
+    bufferedWriter.close()
 }
 
 
@@ -87,3 +100,81 @@ data class Node(val id: Int, val neighbors: MutableMap<Int, Edge>) {
 }
 
 data class Edge(val node: Node, val weight: Int)
+
+// adapted from https://www.quora.com/What-is-the-best-way-in-Java-to-take-input-and-write-output-for-an-Online-Judge/answer/Shreyans-Sheth-1?ch=10
+private class InputReader(private val stream: InputStream) {
+    private val buf = ByteArray(1024)
+    private var curChar: Int = 0
+    private var numChars: Int = 0
+
+    fun read(): Int {
+        if (numChars == -1) {
+            throw InputMismatchException()
+        }
+        if (curChar >= numChars) {
+            curChar = 0
+            try {
+                numChars = stream.read(buf)
+            } catch (e: IOException) {
+                throw InputMismatchException()
+            }
+
+            if (numChars <= 0) {
+                return -1
+            }
+        }
+        return buf[curChar++].toInt()
+    }
+
+    fun nextInt(): Int {
+        var c = read()
+        while (isSpaceChar(c)) {
+            c = read()
+        }
+        var sgn = 1
+        if (c == '-'.toInt()) {
+            sgn = -1
+            c = read()
+        }
+        var res = 0
+        do {
+            if (c < '0'.toInt() || c > '9'.toInt()) {
+                throw InputMismatchException()
+            }
+            res *= 10
+            res += c - '0'.toInt()
+            c = read()
+        } while (!isSpaceChar(c))
+        return res * sgn
+    }
+
+    fun isSpaceChar(c: Int): Boolean {
+        return (c == ' '.toInt() || c == '\n'.toInt() || c == '\r'.toInt() || c == '\t'.toInt() || c == -1)
+    }
+}
+
+private class OutputWriter(outputStream: OutputStream) {
+    private val writer = PrintWriter(BufferedWriter(OutputStreamWriter(outputStream)))
+
+    fun print(vararg objects: Any) {
+        for (i in objects.indices) {
+            if (i != 0) {
+                writer.print(' ')
+            }
+            writer.print(objects[i])
+        }
+        writer.flush()
+    }
+
+    fun printLine(vararg objects: Any) {
+        print(*objects)
+        writer.println()
+        writer.flush()
+    }
+
+    fun close() {
+        writer.close()
+    }
+}
+
+
