@@ -1,4 +1,4 @@
-package com.vooft
+package com.vooft.arrays
 
 import java.util.*
 

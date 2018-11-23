@@ -1,8 +1,7 @@
-package com.vooft
+package com.vooft.implementations
 
 import java.util.*
 import kotlin.math.min
-
 
 fun rotateLayer(matrix: Array<IntArray>, left: Int, top: Int) {
     val rows = matrix.size
@@ -41,6 +40,7 @@ fun rotateLayer(matrix: Array<IntArray>, left: Int, top: Int) {
     }
 }
 
+// https://www.hackerrank.com/challenges/matrix-rotation-algo/problem
 fun main(args: Array<String>) {
     val scanner = Scanner(System.`in`)
     val m = scanner.nextInt()

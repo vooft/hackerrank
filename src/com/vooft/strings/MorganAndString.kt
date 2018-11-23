@@ -1,4 +1,4 @@
-package com.vooft
+package com.vooft.strings
 
 fun morganAndString(aSrc: String, bSrc: String): String {
     val a = "${aSrc}x"
