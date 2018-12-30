@@ -43,7 +43,7 @@ fun main(args: Array<String>) {
         queries[i] = scan.nextLine().split(" ").map{ it.trim().toInt() }.toIntArray()
     }
 
-    val result = com.vooft.tmp.arrayManipulation(n, queries)
+    val result = arrayManipulation(n, queries)
 
     println(result)
 }
